@@ -1,0 +1,232 @@
+<html>
+
+<head>
+<meta name="keywords" content="Java, library, cache, memoize, memoizer, memoization, open source, GNU, LGPL">
+<meta name="description" content="A Java open source library to cache the results of slow methods using annotations and pluggable cache interface.">
+<title>Tek271 Memoizer</title>
+</head>
+
+<body>
+
+<h3 style="BACKGROUND-COLOR: beige" align="center">Introduction To Tek271 Memoizer</h3>
+<p align="center"><i>
+<font size="-1">A Java open source memoization library to cache the results of slow methods using annotations and 
+a pluggable cache interface.</font></i></p>
+<table id="table1" cellspacing="0" cellpadding="0" border="0">
+ <tr>
+  <td align="left">By: </td>
+  <td><b>Abdul Habra</b></td>
+ </tr>
+ <tr>
+  <td align="left">Email:</td>
+  <td><a href="mailto:ahabra@yahoo.com">ahabra@yahoo.com</a></td>
+ </tr>
+ <tr>
+  <td align="left">URL:</td>
+  <td><a href="http://www.tek271.com">www.tek271.com</a></td>
+ </tr>
+ <tr>
+  <td align="left">Version: </td>
+  <td>1.1</td>
+ </tr>
+ <tr>
+  <td align="left">Date: </td>
+  <td>2009.06.27</td>
+ </tr>
+</table>
+<hr align="left" width="30%">
+<p>This software is open source, free, and uses LGPL license.</p>
+<table cellspacing="0" cellpadding="2" border="1">
+ <tr>
+  <th>Version</th>
+  <td><b>Download</b> <i>(<font size="-1">source, Jar, JavaDocs</font></i>)</td>
+  <th>Docs</th>
+ </tr>
+ <tr>
+  <td>1.1</td>
+  <td><a href="tek271.memoize.2009.06.27.zip">tek271.memoize.2009.06.27.zip</a></td>
+  <td> <a href="api/index.html">API</a></td>
+ </tr>
+ <tr>
+  <td>1.01</td>
+  <td><a href="tek271.memoize.2007.03.05.zip">tek271.memoize.2007.03.05.zip</a></td>
+  <td>&nbsp;</td>
+ </tr>
+ <tr>
+  <td>1.0</td>
+  <td><a href="tek271.memoize.2007.03.01.zip">tek271.memoize.2007.03.01.zip</a></td>
+  <td>&nbsp;</td>
+ </tr>
+</table>
+<hr>
+<h4>1. Background</h4>
+<p>If a function produces the same output given the same inputs, and if this function is slow, 
+it makes sense for the function to cache its outputs to avoid repeated evaluations. This caching 
+behavior is called <i><a href="http://en.wikipedia.org/wiki/Memoize">Memoization</a></i> (yes 
+there is no <b>r</b>).</p>
+<p>For example consider a method that reads some authorization string from database for a 
+given login:</p>
+<pre class="smallFont"><font color="#808080"><i>// This is not ideal code, it is meant only to show a concept
+</i></font><b>public</b> String readAuthorizationFromDb(String loginId) {
+  Connection con= getDbConnection();   <font color="#808080"><i>// perhaps pooled</i></font>
+  String sql= &quot;select authorization from security where login_id=&#39;&quot; + loginId + &quot;&#39;&quot;;
+  String auth= readFromDb(con, sql);   <i><font color="#808080">// assume we have such a method</font>
+</i>  con.close();
+  <b>return</b> auth;
+}</pre>
+<p>If this function is called many times, with the same loginId, a programmer may consider 
+this kind of optimization:</p>
+<pre class="smallFont"><span style="background-color: #CECECE">Map cache= new HashMap();
+</span>
+<font color="#808080"><i>// This is not ideal code, it is meant only to show a concept
+</i></font><b>public</b> String readAuthorizationFromDb(String loginId) {
+<span style="background-color: #CECECE">  </span><b><span 
+style="background-color: #CECECE">if</span></b><span style="background-color: #CECECE"> (cache.containsKey(loginId)) {
+    </span><b><span style="background-color: #CECECE">return</span></b><span 
+style="background-color: #CECECE"> (String) cache.get(loginId);
+  }
+</span>
+  Connection con= getDbConnection();   <font color="#808080"><i>// perhaps pooled</i></font>
+  String sql= &quot;select authorization from security where login_id=&#39;&quot; + loginId + &quot;&#39;&quot;;
+  String auth= readFromDb(con, sql);   <i><font color="#808080">// assume we have such a method</font>
+</i>  con.close();
+
+<span style="background-color: #CECECE">  cache.put(loginId, auth);
+</span>  <b>return</b> auth;
+}</pre>
+<p>This solution could work for a simple program, however it suffers from several problems 
+such as:</p>
+<ol>
+ <li>There is no control on the size of the map. If the method is called many times with 
+ different <code>loginId</code>s, the size of map can increase and run out of memory.</li>
+ <li>There is no control on expiring items in the cache. Once a <code>loginId</code> is 
+ put in the map it stays there, if the database contents change, there is no way to update 
+ the content of the map besides restarting the program.</li>
+ <li>Having cache handling code in every method that needs caching is annoying and error prone.</li>
+</ol>
+<p>One possible solution is to use
+<a href="http://en.wikipedia.org/wiki/Aspect-oriented_programming">Aspects</a> to cache this 
+kind of method. However, the solution provided here uses standard Java, and is lighter in weight. 
+The following is the method&#39;s code using Tek271 Memoizer:</p>
+<pre class="smallFont"><font color="#808080"><i>// This is not ideal code, it is meant only to show a concept
+</i></font><span style="background-color: #CECECE">@Remember</span><i>
+</i><b>public</b> String readAuthorizationFromDb(String loginId) {
+  Connection con= getDbConnection();   <font color="#808080"><i>// perhaps pooled</i></font>
+  String sql= &quot;select authorization from security where login_id=&#39;&quot; + loginId + &quot;&#39;&quot;;
+  String auth= readFromDb(con, sql);   <i><font color="#808080">// assume we have such a method</font>
+</i>  con.close();
+  <b>return</b> auth;
+}</pre>
+<p>As you can see, the only needed addition is to add the <code>@Remember</code> annotation 
+before the method&#39;s declaration.</p>
+<h4>2. Required Setup</h4>
+<ol>
+ <li>You need JDK 5 or higher (to support annotations).</li>
+ <li>The cglib jar file, currently it is <code>cglib-nodep-2.2.jar</code>. Available 
+ from <a href="http://cglib.sourceforge.net">http://cglib.sourceforge.net</a>. It is also 
+ included in this project&#39;s download.</li>
+ <li>The jar file for Tek271 Memoizer, currently <code>tek271.memoize-1.1.jar</code>.</li>
+</ol>
+<h4>3. Example</h4>
+<pre class="smallFont"><b>import</b> com.tek271.memoize.Remember;
+
+<b>public class </b>ExpensiveCalcs {
+  @Remember
+  <b>public</b> String slowMethod(String param1) {
+    System.out.println(&quot;inside slowMethod(&quot; + param1 + &quot;)&quot;);
+    <b>return</b> param1 + param1;
+  }
+}</pre>
+<p>Now, to use the slowMethod():</p>
+<pre class="smallFont"><b>import</b> com.tek271.memoize.RememberFactory;
+...
+
+ExpensiveCalcs ec= RememberFactory.createProxy(ExpensiveCalcs.class);
+String s= ec.slowMethod(&quot;hello&quot;);</pre>
+<p>Notice how you use <code>RememberFactory.createProxy()</code> to create instances of
+<code>ExpensiveCalcs</code> instead of using a constructor.</p>
+<p>An alternative approach is also available (added in version 1.1)</p>
+<pre class="smallFont">ExpensiveCalcs ec= <b>new</b> ExpensiveCalcs(); <i>// can be created through dependency injection</i>
+ExpensiveCalcs decorated= <span style="background-color: #CECECE">RememberFactory.decorate</span>(ec);
+String s= decorated.slowMethod(&quot;hello&quot;);</pre>
+<p>This approach can be used when you have an existing object (rather than a class). For 
+example, if the object you have was created using some dependency injection framework like
+<i>Spring</i>.</p>
+<h4>4. <code>@Remember</code>&#39;s Attributes</h4>
+<p>The <code>@Remember </code>annotation has several attributes that can be used to modify 
+its default behavior.</p>
+<p><b>maxSize</b><br>
+The maximum number of method results to cache. The default is 128. For example, to change 
+the maxSize to 1000:</p>
+<p><code>@Remember(maxSize=1000)</code></p>
+<p><b>timeToLive</b><br>
+The period of time after which, cached return values of the method will expire. The default 
+is 2 minutes. This attribute works in conjunction with the <code>timeUnit</code> attribute.</p>
+<p><b>timeUnit</b><br>
+The unit of time for the timeToLive attribute. The default is Minute. This is an enumerations 
+with possible values of {MILLI, SECOND, MINUTE, HOUR}. For example, to change the timeToLive 
+to 4 hours:</p>
+<p><code>@Remember(timeToLive=4, timeUnit=TimeUnitEnum.HOUR)</code></p>
+<p><b>excludedParametersIndex</b><br>
+Method parameters that should NOT be used as part of the cache&#39;s key. The excluded parameters 
+are indicated in an <code>int</code> array. The java reflection API does not provide access 
+to method&#39;s parameters names, hence we use index. The index of the first parameter is zero. 
+For example assume that you have a method with three parameters:</p>
+<pre class="smallFont">@Remember
+String readUsersAddress(Connection con, String city, String state) {
+  ...
+}</pre>
+<p>To memoize this method, you realize that the connection parameter should not impact the 
+return value of the method:</p>
+<pre class="smallFont">@Remember(<b>excludedParametersIndex</b>={0})
+String readUsersAddress(Connection con, String city, String state) {
+  ...
+}</pre>
+<div style="border-style: solid; border-width: 1px; padding: 1px">
+ <b>Important reminder</b>: method parameters which are used in the cahce's key must 
+ support correct <code>equals()</code> and <code>hashCode()</code> methods.</div>
+<h4>5. Pluggable Caching</h4>
+<p>The Tek271 Memoizer stores its cached values using a light-weight implementation of a cache 
+store using <code>java.util.LinkedHashMap</code> class. However, you can use any other caching 
+software by implementing the provided <code>ICacheFactory</code> and <code>ICache</code> interfaces 
+and using this factory method:</p>
+<pre class="smallFont">RememberFactory.createProxy(Class targetClass, ICacheFactory cacheFactory)</pre>
+<p>An implementation that uses <a href="http://ehcache.sourceforge.net/">Ehcache</a> is available.</p>
+<h4>6. References</h4>
+<ol>
+ <li>Memoization in Java Using Dynamic Proxy Classes by Tom White.
+ <a href="http://www.onjava.com/pub/a/onjava/2003/08/20/memoization.html">www.onjava.com/pub/a/onjava/2003/08/20/memoization.html</a>. 
+ This solution however requires creating interfaces for each class that have memoized methods.</li>
+ <li>Create Proxies Dynamically Using CGLIB Library by Jason Zhicheng Li.
+ <a href="http://www.ociweb.com/jnb/jnbNov2005.html">www.ociweb.com/jnb/jnbNov2005.html</a></li>
+ <li>Explore the Dynamic Proxy API by <strong style="font-weight: 400">Jeremy Blosser</strong><span 
+ style="font-weight: 400"><strong style="font-weight: 400">.</strong></span>
+ <a href="http://www.javaworld.com/javaworld/jw-11-2000/jw-1110-proxy.html">www.javaworld.com/javaworld/jw-11-2000/jw-1110-proxy.html</a></li>
+ <li>The Java Docs for JSE 5.0 and cglib.</li>
+</ol>
+<hr>
+<h3>Changes</h3>
+<p><b>Version 1.1, 2009.06.27</b></p>
+<ol>
+<li>Updated dependency to latest cglib jar (version 2.2)</li>
+<li>Added RememberFactory.clearCache() methods to ease unit testing.</li>
+<li>Added an optimization proposed by <i>Christian Semrau</i>.</li>
+<li>Added Generics support to RememberFactory.createProxy()</li>
+<li>Added RememberFactory.decorate() to decorate a given object (rather than class). 
+    This feature was requested by <i>Patrick McMichael</i>.</li>
+</ol>
+
+<p><b>Version 1.01, 2007.03.05</b></p>
+<p>Some JavaDocs fixes and spelling mistakes.</p>
+<p><b>Version 1.0, 2007.03.01</b><br>
+First public release</p>
+<table style="BACKGROUND-COLOR: beige" cellspacing="0" cellpadding="0" width="100%" 
+border="0" id="table2">
+ <tr>
+  <td align="middle"><small><em>Page Last Updated 2009.06.27</em></small></td>
+ </tr>
+</table>
+
+</body>
+
+</html>
