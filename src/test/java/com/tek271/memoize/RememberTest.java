@@ -1,16 +1,18 @@
 package com.tek271.memoize;
 
-import static com.tek271.memoize.ExpensiveCalcs.*;
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class RememberTest extends TestCase {
+import static com.tek271.memoize.ExpensiveCalcs.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RememberTest {
   
   private static ExpensiveCalcs getProxiedExpensiveCalcs() {
     clearLogAndCache();
-    ExpensiveCalcs ec= RememberFactory.createProxy(ExpensiveCalcs.class);
-    return ec;
+    return RememberFactory.createProxy(ExpensiveCalcs.class);
   }
-  
+
+  @Test
   public void testVoidNoParams() {
     ExpensiveCalcs ec= getProxiedExpensiveCalcs();
     ec.voidIsNotMemoized();
@@ -18,6 +20,7 @@ public class RememberTest extends TestCase {
     assertEquals(VOID_ISNOT_MEMOIZED, LOG.get(0));
   }
 
+  @Test
   public void testNoAnnotation() throws Exception {
     ExpensiveCalcs ec= getProxiedExpensiveCalcs();
     long t1= ec.noAnnotation();
@@ -25,7 +28,8 @@ public class RememberTest extends TestCase {
     assertEquals(2, LOG.size());
     assertTrue( t2 >= (t1 + DELAY) );
   }
-  
+
+  @Test
   public void testNoParams() throws Exception {
     ExpensiveCalcs ec= getProxiedExpensiveCalcs();
     long t1= ec.noParams();
@@ -35,7 +39,8 @@ public class RememberTest extends TestCase {
     assertEquals(t1, t2);
     assertEquals(t1, t3);
   }
-  
+
+  @Test
   public void testWithParams() throws Exception {
     ExpensiveCalcs ec= getProxiedExpensiveCalcs();
     String s1= ec.withParams("abdul");
@@ -50,7 +55,8 @@ public class RememberTest extends TestCase {
     assertEquals("JAVA", s3);
     assertEquals(2, LOG.size());
   }
-  
+
+  @Test
   public void testGetSalary() {
     // the annotation param at index 0 is excluded in ExpensiveCalcs.getSalary()
     ExpensiveCalcs ec= getProxiedExpensiveCalcs();
@@ -68,7 +74,8 @@ public class RememberTest extends TestCase {
     assertEquals(s2, s5);
     assertEquals(4, LOG.size());
   }
-  
+
+  @Test
   public void testCacheMaxSize() {
     ExpensiveCalcs ec= getProxiedExpensiveCalcs();
 
@@ -85,7 +92,8 @@ public class RememberTest extends TestCase {
     ec.limitedCacheSize(1);
     assertEquals(5, LOG.size());
   }
-  
+
+  @Test
   public void testDecorate() throws Exception {
     clearLogAndCache();
     ExpensiveCalcs ec= new ExpensiveCalcs();
@@ -101,7 +109,8 @@ public class RememberTest extends TestCase {
     assertEquals("JAVA", s3);
     assertEquals(2, LOG.size());
   }
-  
+
+  @Test
   public void testDecorateWillActuallyUseDecoratedObject() throws Exception {
     clearLogAndCache();
     String prefix= "+";
@@ -116,7 +125,8 @@ public class RememberTest extends TestCase {
     assertEquals(1, LOG.size());
     assertEquals(prefix +  WITHPARAMS, LOG.get(0));
   }
-  
+
+  @Test
   public void testDecorateNullShouldThrowNPE() {
     clearLogAndCache();
     try {

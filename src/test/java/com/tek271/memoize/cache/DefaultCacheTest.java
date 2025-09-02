@@ -1,17 +1,21 @@
 package com.tek271.memoize.cache;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class DefaultCacheTest extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+public class DefaultCacheTest {
   private static final int MAX_SIZE=4;
   private static final long TIME_TO_LIVE= 400;
   private static final TimeUnitEnum TIME_UNIT= TimeUnitEnum.MILLI;
   
   private ICache cache;
-  
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp();
+
+  @BeforeEach
+  protected void beforeEach() {
     cache= new DefaultCache(MAX_SIZE, TIME_TO_LIVE, TIME_UNIT);
     cache.put("1", "a");
     cache.put("2", "b");
@@ -19,30 +23,33 @@ public class DefaultCacheTest extends TestCase {
     cache.put("4", "d");
   }
 
-  @Override
-  protected void tearDown() throws Exception {
+  @AfterEach
+  protected void tearDown() {
     cache= null;
-    super.tearDown();
   }
 
+  @Test
   public void testClear() {
     assertEquals(4, cache.size());
     cache.clear();
     assertEquals(0, cache.size());
   }
 
+  @Test
   public void testMaxSize() {
     assertEquals(4, cache.getMaxSize());
     cache.put("5", "e");
     assertEquals(4, cache.getMaxSize());
   }
 
+  @Test
   public void testRemoveExpired() throws Exception {
     Thread.sleep(500);
     cache.removeExpired();
     assertEquals(0, cache.size());
   }
 
+  @Test
   public void testPut() throws Exception {
     cache.put("5", "e");
     Object val= cache.get("5");
@@ -55,11 +62,13 @@ public class DefaultCacheTest extends TestCase {
     assertEquals(2, cache.size());
   }
 
+  @Test
   public void testGet() {
-    assertEquals(cache.get("2"), "b");
+    assertEquals("b", cache.get("2"));
     assertNull(cache.get("zz"));
   }
 
+  @Test
   public void testRemove() {
     assertEquals("a", cache.remove("1"));
     assertNull(cache.get("a"));
