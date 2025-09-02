@@ -23,6 +23,8 @@ You can contact the author at ahabra at yahoo.com
 
 package com.tek271.memoize.cache;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Cache is a data structure that keeps a set of entries identified by their name.
  * Each entry in the cache has a unique name. The cache is similar to a Map but with<ul>
@@ -40,7 +42,7 @@ public interface ICache {
   long getTimeToLive();
   
   /** Get the TimeToLive time unit */
-  TimeUnitEnum getTimeToLiveUnit();
+  TimeUnit getTimeToLiveUnit();
   
   /** Get the maximum size of the cache */
   int getMaxSize();

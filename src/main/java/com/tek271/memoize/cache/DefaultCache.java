@@ -27,6 +27,7 @@ import java.io.Serial;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An implementation of the ICache interface. This is used as the default cache when no
@@ -39,20 +40,24 @@ import java.util.Map;
 class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
   @Serial
   private static final long serialVersionUID = 1L;
+
+  private static final int INITIAL_CAPACITY= 16;
+  private static final float LOAD_FACTOR= 0.75f;
+  private static final boolean LRU_ORDER= true;
   
   private final int maxSize;
   private final long timeToLive;
-  private final TimeUnitEnum timeUnit;
+  private final TimeUnit timeUnit;
   private final long timeToLiveMillis;
   private final Map<Object, Long> timeStamps = new LinkedHashMap<>();
 
   
-  public DefaultCache(int maxSize, long timeToLive, TimeUnitEnum timeUnit) {
-    super(IConstants.INITIAL_CAPACITY, IConstants.LOAD_FACTOR, IConstants.LRU_ORDER);
+  public DefaultCache(int maxSize, long timeToLive, TimeUnit timeUnit) {
+    super(INITIAL_CAPACITY, LOAD_FACTOR, LRU_ORDER);
     this.maxSize = maxSize;
     this.timeToLive = timeToLive;
     this.timeUnit = timeUnit;
-    timeToLiveMillis = timeToLive * timeUnit.getMilliSeconds();
+    timeToLiveMillis = timeUnit.toMillis(timeToLive);
   }
   
   public int getMaxSize() {
@@ -63,7 +68,7 @@ class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
     return timeToLive;
   }
 
-  public TimeUnitEnum getTimeToLiveUnit() {
+  public TimeUnit getTimeToLiveUnit() {
     return timeUnit;
   }
 

@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * An implementation of the ICacheFactory interface. This is used as the default 
@@ -39,6 +40,10 @@ import java.util.Set;
  */
 public class DefaultCacheFactory implements ICacheFactory {
   private static final ICacheFactory SINGLETON = new DefaultCacheFactory();
+  private static final int MAX_SIZE= 128;
+  private static final long TTL= 2;
+  private static final TimeUnit TIME_UNIT= TimeUnit.MINUTES;
+
   private final Map<String, ICache> allCaches = new HashMap<>();
   
   
@@ -51,7 +56,7 @@ public class DefaultCacheFactory implements ICacheFactory {
   }
   
   public ICache getCache(final String cacheName, final int maxSize, 
-                         final long timeToLive, final TimeUnitEnum timeUnit) {
+                         final long timeToLive, final TimeUnit timeUnit) {
     if (allCaches.containsKey(cacheName)) {
       return allCaches.get(cacheName);
     }
@@ -64,7 +69,7 @@ public class DefaultCacheFactory implements ICacheFactory {
   }
   
   public ICache getCache(final String cacheName) {
-    return getCache(cacheName, IConstants.MAX_SIZE, IConstants.TTL, IConstants.TIME_UNIT);
+    return getCache(cacheName, MAX_SIZE, TTL, TIME_UNIT);
   }
 
   public synchronized void clear() {

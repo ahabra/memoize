@@ -28,8 +28,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import com.tek271.memoize.cache.TimeUnitEnum;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Used for caching methods (memoization). Methods that can utilize this annotation
@@ -70,7 +69,7 @@ public @interface Remember {
   long timeToLive() default 2;
   
   /** The unit of time for the timeToLive attribute. The default is Minute. */
-  TimeUnitEnum timeUnit() default TimeUnitEnum.MINUTE;
+  TimeUnit timeUnit() default TimeUnit.MINUTES;
   
   /** Method parameters that should NOT be used as part of the cache's key.
    * The java reflection API does not provide access to method's parameters

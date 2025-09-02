@@ -4,13 +4,15 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class DefaultCacheTest {
   private static final int MAX_SIZE=4;
   private static final long TIME_TO_LIVE= 400;
-  private static final TimeUnitEnum TIME_UNIT= TimeUnitEnum.MILLI;
+  private static final TimeUnit TIME_UNIT= TimeUnit.MILLISECONDS;
   
   private ICache cache;
 

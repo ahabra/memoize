@@ -2,8 +2,8 @@ package com.tek271.memoize;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-import com.tek271.memoize.cache.TimeUnitEnum;
 import com.tek271.memoize.utils.UtilsArrays;
 
 public class ExpensiveCalcs {
@@ -84,7 +84,7 @@ public class ExpensiveCalcs {
   @Remember (
       maxSize=2,
       timeToLive=60,
-      timeUnit=TimeUnitEnum.SECOND
+      timeUnit= TimeUnit.SECONDS
   )
   public int limitedCacheSize(int a) {
     log("limitedCacheSize(" + a + ")");

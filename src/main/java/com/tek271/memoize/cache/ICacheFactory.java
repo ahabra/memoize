@@ -23,6 +23,8 @@ You can contact the author at ahabra at yahoo.com
 
 package com.tek271.memoize.cache;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Cache factory that creates and maintains instances of cache objects.
  * @author Abdul Habra
@@ -43,7 +45,7 @@ public interface ICacheFactory {
    * @param timeUnit The Unit of time used for the <code>timeToLive</code>.
    * @return A cache with the given name.
    */
-  ICache getCache(String cacheName, int maxSize, long timeToLive, TimeUnitEnum timeUnit);
+  ICache getCache(String cacheName, int maxSize, long timeToLive, TimeUnit timeUnit);
   
   /**
    * If the factory has a cache with the given name, return it, otherwise, create a new
