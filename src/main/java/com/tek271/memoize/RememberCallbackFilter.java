@@ -25,6 +25,7 @@ package com.tek271.memoize;
 
 import java.lang.reflect.Method;
 
+import com.tek271.memoize.utils.Utils;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.CallbackFilter;
 import net.sf.cglib.proxy.MethodInterceptor;

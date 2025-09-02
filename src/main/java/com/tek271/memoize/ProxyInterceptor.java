@@ -26,6 +26,7 @@ package com.tek271.memoize;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.tek271.memoize.utils.Utils;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
@@ -41,10 +42,10 @@ import com.tek271.memoize.cache.ICacheFactory;
  * @version 1.0
  */
 class ProxyInterceptor implements MethodInterceptor {
-  private ICacheFactory pCacheFactory;
+  private final ICacheFactory cacheFactory;
   
   public ProxyInterceptor(ICacheFactory cacheFactory) {
-    pCacheFactory= cacheFactory;
+    this.cacheFactory = cacheFactory;
   }
   
  /**
@@ -66,7 +67,7 @@ class ProxyInterceptor implements MethodInterceptor {
     List<Object> relevantArgs= Utils.getRelevantArguments(args, ann.excludedParametersIndex());
     
     // access cache
-    ICache cache= Utils.getCache(pCacheFactory, method, ann);
+    ICache cache= Utils.getCache(cacheFactory, method, ann);
     cache.removeExpired();
     if (cache.containsKey(relevantArgs) ) {
       return cache.get(relevantArgs);

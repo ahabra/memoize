@@ -6,15 +6,16 @@ import java.util.List;
 import com.tek271.memoize.cache.ICache;
 import com.tek271.memoize.cache.ICacheFactory;
 
+import com.tek271.memoize.utils.Utils;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 class DecoratorInterceptor implements MethodInterceptor {
-  private ICacheFactory pCacheFactory;
-  private Object objectTobeDecorated;
+  private final ICacheFactory cacheFactory;
+  private final Object objectTobeDecorated;
   
   public DecoratorInterceptor(ICacheFactory cacheFactory, Object objectTobeDecorated) {
-    pCacheFactory= cacheFactory;
+    this.cacheFactory = cacheFactory;
     this.objectTobeDecorated= objectTobeDecorated;
   }
 
@@ -31,7 +32,7 @@ class DecoratorInterceptor implements MethodInterceptor {
     List<Object> relevantArgs= Utils.getRelevantArguments(args, ann.excludedParametersIndex());
     
     // access cache
-    ICache cache= Utils.getCache(pCacheFactory, method, ann);
+    ICache cache= Utils.getCache(cacheFactory, method, ann);
     cache.removeExpired();
     if (cache.containsKey(relevantArgs) ) {
       return cache.get(relevantArgs);

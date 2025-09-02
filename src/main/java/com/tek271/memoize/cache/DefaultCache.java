@@ -23,6 +23,7 @@ You can contact the author at ahabra at yahoo.com
 
 package com.tek271.memoize.cache;
 
+import java.io.Serial;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -36,13 +37,14 @@ import java.util.Map;
  * @version 1.0
  */
 class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
+  @Serial
   private static final long serialVersionUID = 1L;
   
-  private int pMaxSize=128;
-  private long pTimeToLive= 2;
-  private TimeUnitEnum pTimeUnit= TimeUnitEnum.MINUTE;
-  private long pTimeToLiveMillis= 2 * 60 * 1000;
-  private Map<Object, Long> pTimeStamps= new LinkedHashMap<Object, Long>();
+  private int maxSize =128;
+  private long timeToLive = 2;
+  private TimeUnitEnum timeUnit = TimeUnitEnum.MINUTE;
+  private long timeToLiveMillis = 2 * 60 * 1000;
+  private final Map<Object, Long> timeStamps = new LinkedHashMap<>();
   
   public DefaultCache() {
     super(IConstants.INITIAL_CAPACITY, IConstants.LOAD_FACTOR, IConstants.LRU_ORDER);
@@ -50,36 +52,36 @@ class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
   
   public DefaultCache(int maxSize, long timeToLive, TimeUnitEnum timeUnit) {
     super(IConstants.INITIAL_CAPACITY, IConstants.LOAD_FACTOR, IConstants.LRU_ORDER);
-    pMaxSize= maxSize;
-    pTimeToLive= timeToLive;
-    pTimeUnit= timeUnit;
-    pTimeToLiveMillis= timeToLive * timeUnit.getMilliSeconds();
+    this.maxSize = maxSize;
+    this.timeToLive = timeToLive;
+    this.timeUnit = timeUnit;
+    timeToLiveMillis = timeToLive * timeUnit.getMilliSeconds();
   }
   
   public int getMaxSize() {
-    return pMaxSize;
+    return maxSize;
   }
   
   public long getTimeToLive() {
-    return pTimeToLive;
+    return timeToLive;
   }
 
   public TimeUnitEnum getTimeToLiveUnit() {
-    return pTimeUnit;
+    return timeUnit;
   }
 
   private boolean isExpired(final long timeStamp) {
-    return System.currentTimeMillis() - timeStamp > pTimeToLiveMillis;
+    return System.currentTimeMillis() - timeStamp > timeToLiveMillis;
   }
   
   private boolean isExpired(final Object key) {
-    Long ts= pTimeStamps.get(key);
+    Long ts= timeStamps.get(key);
     if (ts==null) return false;
     return isExpired(ts.longValue());
   }
   
   public synchronized void removeExpired() {
-    for(Iterator<Object> i= pTimeStamps.keySet().iterator(); i.hasNext(); ) {
+    for(Iterator<Object> i = timeStamps.keySet().iterator(); i.hasNext(); ) {
       Object key= i.next();
       if (! isExpired(key)) break;
       super.remove(key);
@@ -88,17 +90,17 @@ class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
   }
   
   private void putInTimeStamp(Object key) {
-    if (pTimeStamps.containsKey(key)) {
-      pTimeStamps.remove(key);
+    if (timeStamps.containsKey(key)) {
+      timeStamps.remove(key);
     }
-    pTimeStamps.put(key, System.currentTimeMillis());
+    timeStamps.put(key, System.currentTimeMillis());
   }
   
   @Override
   protected synchronized boolean removeEldestEntry(
       @SuppressWarnings("unused") Map.Entry<Object, Object> eldest) {
     removeExpired();
-    return size() > pMaxSize;
+    return size() > maxSize;
   }
 
   @Override
@@ -116,13 +118,13 @@ class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
   
   @Override
   public synchronized Object remove(Object key) {
-    pTimeStamps.remove(key);
+    timeStamps.remove(key);
     return super.remove(key);
   }
   
   @Override
   public synchronized void clear() {
-    pTimeStamps.clear();
+    timeStamps.clear();
     super.clear();
   }
 

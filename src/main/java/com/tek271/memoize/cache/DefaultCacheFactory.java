@@ -38,12 +38,12 @@ import java.util.Set;
  * @version 1.0
  */
 public class DefaultCacheFactory implements ICacheFactory {
-  private static ICacheFactory pSingleton= new DefaultCacheFactory();
-  private Map<String, ICache> pAllCaches= new HashMap<String, ICache>(); 
+  private static final ICacheFactory SINGLETON = new DefaultCacheFactory();
+  private final Map<String, ICache> allCaches = new HashMap<>();
   
   
   public static ICacheFactory getInstance() {
-    return pSingleton;
+    return SINGLETON;
   }
 
   private DefaultCacheFactory() {
@@ -52,13 +52,13 @@ public class DefaultCacheFactory implements ICacheFactory {
   
   public ICache getCache(final String cacheName, final int maxSize, 
                          final long timeToLive, final TimeUnitEnum timeUnit) {
-    if (pAllCaches.containsKey(cacheName)) {
-      return pAllCaches.get(cacheName);
+    if (allCaches.containsKey(cacheName)) {
+      return allCaches.get(cacheName);
     }
     
     synchronized (this) {
       ICache cache= new DefaultCache(maxSize, timeToLive, timeUnit);
-      pAllCaches.put(cacheName, cache);
+      allCaches.put(cacheName, cache);
       return cache;
     }
   }
@@ -68,17 +68,17 @@ public class DefaultCacheFactory implements ICacheFactory {
   }
 
   public synchronized void clear() {
-    pAllCaches.clear();
+    allCaches.clear();
   }
 
   public synchronized void remove(final String cacheName) {
-    pAllCaches.remove(cacheName);
+    allCaches.remove(cacheName);
   }
   
   public synchronized void removeExpired() {
-    Set<String> keys= pAllCaches.keySet();
+    Set<String> keys= allCaches.keySet();
     for (Iterator<String> i=keys.iterator(); i.hasNext();) {
-      ICache cache= pAllCaches.get(i);
+      ICache cache= allCaches.get(i);
       cache.removeExpired();
       if (cache.size()==0) {
         i.remove();
