@@ -34,7 +34,7 @@ public enum TimeUnitEnum {
   MINUTE(60L * 1000L), 
   HOUR(3600L * 1000L);
   
-  private long milliSeconds;
+  private final long milliSeconds;
   
   TimeUnitEnum(long milliSeconds) {
     this.milliSeconds = milliSeconds;

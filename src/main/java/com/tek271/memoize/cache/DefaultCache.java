@@ -40,15 +40,12 @@ class DefaultCache extends LinkedHashMap<Object, Object> implements ICache {
   @Serial
   private static final long serialVersionUID = 1L;
   
-  private int maxSize =128;
-  private long timeToLive = 2;
-  private TimeUnitEnum timeUnit = TimeUnitEnum.MINUTE;
-  private long timeToLiveMillis = 2 * 60 * 1000;
+  private final int maxSize;
+  private final long timeToLive;
+  private final TimeUnitEnum timeUnit;
+  private final long timeToLiveMillis;
   private final Map<Object, Long> timeStamps = new LinkedHashMap<>();
-  
-  public DefaultCache() {
-    super(IConstants.INITIAL_CAPACITY, IConstants.LOAD_FACTOR, IConstants.LRU_ORDER);
-  }
+
   
   public DefaultCache(int maxSize, long timeToLive, TimeUnitEnum timeUnit) {
     super(IConstants.INITIAL_CAPACITY, IConstants.LOAD_FACTOR, IConstants.LRU_ORDER);
