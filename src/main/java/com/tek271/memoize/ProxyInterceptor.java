@@ -62,7 +62,7 @@ class ProxyInterceptor implements MethodInterceptor {
     // There is no need to check if the method should be memoized or not.
     // That is determined by the RememberCallbackFilter
     
-    Remember ann= method.getAnnotation(Remember.class);
+    Remember ann = method.getAnnotation(Remember.class);
     // check annotation to find excluded parameters, build a list of key parameters
     List<Object> relevantArgs= Utils.getRelevantArguments(args, ann.excludedParametersIndex());
     
@@ -72,9 +72,9 @@ class ProxyInterceptor implements MethodInterceptor {
     if (cache.containsKey(relevantArgs) ) {
       return cache.get(relevantArgs);
     }
+
     Object value = proxy.invokeSuper(obj, args);
     cache.put(relevantArgs, value);
-    
     return value;
   }
 

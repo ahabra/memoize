@@ -108,7 +108,6 @@ public class RememberFactory {
    * annotated by <code>Remember</code> will be cached.
    * @since 1.0
    */
-  @SuppressWarnings("unchecked")
   public static <T> T createProxy(Class<T> targetClass, ICacheFactory cacheFactory) {
     cacheFactory= getCacheFactory(cacheFactory);
 
@@ -119,8 +118,9 @@ public class RememberFactory {
     Enhancer enhancer = new Enhancer();  // cglib class
     enhancer.setSuperclass(targetClass);
     enhancer.setCallbacks(callbacks );
-    enhancer.setCallbackFilter(RememberCallbackFilter.INSTANCE);    
-    
+    enhancer.setCallbackFilter(RememberCallbackFilter.INSTANCE);
+
+    //noinspection unchecked
     return (T) enhancer.create();
   }
   
@@ -135,7 +135,6 @@ public class RememberFactory {
    * annotated by <code>Remember</code> will be cached.
    * @since 1.0
    */  
-  @SuppressWarnings(value={"unchecked"})
   public static <T> T createProxy(Class<T> targetClass) {
     return createProxy(targetClass, null);
   }
@@ -152,7 +151,6 @@ public class RememberFactory {
    * invocations will be routed to the objectTobeDecorated after checking for memoization. 
    * @since 1.1
    */
-  @SuppressWarnings("unchecked")
   public static <T> T decorate(T objectTobeDecorated, ICacheFactory cacheFactory) {
     if (objectTobeDecorated==null) {
       throw new NullPointerException("Memoizer cannot decorate a null object");
@@ -163,6 +161,7 @@ public class RememberFactory {
     Enhancer enhancer = new Enhancer();  // cglib class
     enhancer.setSuperclass(objectTobeDecorated.getClass());
     enhancer.setCallback(interceptor);
+    //noinspection unchecked
     return (T) enhancer.create();
   }
   
@@ -187,7 +186,7 @@ public class RememberFactory {
   /**
    * Clear the given cache. When cacheFactory is null, then the DefaultCacheFactory
    * is cleared. Useful for unit testing.
-   * @param cacheFactory
+   * @param cacheFactory The cache factory to clear
    * @since 1.1
    */
   public static void clearCache(ICacheFactory cacheFactory) {
