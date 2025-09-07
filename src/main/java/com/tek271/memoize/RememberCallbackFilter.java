@@ -35,7 +35,7 @@ import net.sf.cglib.proxy.NoOp;
  * Determine which methods on a class should be memoized.
  * This class provides an enhancement over the original implementation which intercepted
  * all methods, then determined if they should be memoized.
- * This enhancement, and code was provided by Christian Semrau. Abdul Habra did
+ * This enhancement and code was provided by Christian Semrau. Abdul Habra did
  * some refactoring. 
  * @author Christian Semrau. 
  * @version 1.1

@@ -23,11 +23,11 @@ You can contact the author at ahabra at yahoo.com
 
 package com.tek271.memoize;
 
+import com.tek271.memoize.cache.CacheUtils;
 import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 
-import com.tek271.memoize.cache.DefaultCacheFactory;
 import com.tek271.memoize.cache.ICacheFactory;
 
 /**
@@ -109,10 +109,10 @@ public class RememberFactory {
    * @since 1.0
    */
   public static <T> T createProxy(Class<T> targetClass, ICacheFactory cacheFactory) {
-    cacheFactory= getCacheFactory(cacheFactory);
+    cacheFactory= CacheUtils.getCacheFactory(cacheFactory);
 
     MethodInterceptor interceptor= new ProxyInterceptor(cacheFactory);
-    // Control which methods should go thru the interceptor
+    // Control which methods should go through the interceptor
     Callback[] callbacks= RememberCallbackFilter.createCallbacks(interceptor); 
     
     Enhancer enhancer = new Enhancer();  // cglib class
@@ -155,7 +155,7 @@ public class RememberFactory {
     if (objectTobeDecorated==null) {
       throw new NullPointerException("Memoizer cannot decorate a null object");
     }
-    cacheFactory= getCacheFactory(cacheFactory);
+    cacheFactory= CacheUtils.getCacheFactory(cacheFactory);
     
     MethodInterceptor interceptor= new DecoratorInterceptor(cacheFactory, objectTobeDecorated);
     Enhancer enhancer = new Enhancer();  // cglib class
@@ -164,11 +164,7 @@ public class RememberFactory {
     //noinspection unchecked
     return (T) enhancer.create();
   }
-  
-  private static ICacheFactory getCacheFactory(ICacheFactory cacheFactory) {
-    if (cacheFactory!=null) return cacheFactory;
-    return DefaultCacheFactory.getInstance();
-  }
+
   
   /**
    * Memoize methods of an existing object. Allows integrating with other frameworks like
@@ -190,10 +186,7 @@ public class RememberFactory {
    * @since 1.1
    */
   public static void clearCache(ICacheFactory cacheFactory) {
-    if (cacheFactory==null) {
-      cacheFactory= DefaultCacheFactory.getInstance();
-    }
-    cacheFactory.clear();
+    CacheUtils.clearCache(cacheFactory);
   }
   
   /**
@@ -202,7 +195,7 @@ public class RememberFactory {
    * @since 1.1
    */
   public static void clearCache() {
-    clearCache(null);
+    CacheUtils.clearCache();
   }
   
 }

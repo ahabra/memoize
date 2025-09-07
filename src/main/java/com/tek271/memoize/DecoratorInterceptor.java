@@ -3,6 +3,7 @@ package com.tek271.memoize;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import com.tek271.memoize.cache.CacheUtils;
 import com.tek271.memoize.cache.ICache;
 import com.tek271.memoize.cache.ICacheFactory;
 
@@ -32,7 +33,7 @@ class DecoratorInterceptor implements MethodInterceptor {
     List<Object> relevantArgs= Utils.getRelevantArguments(args, ann.excludedParametersIndex());
     
     // access cache
-    ICache cache= Utils.getCache(cacheFactory, method, ann);
+    ICache cache= CacheUtils.getCache(cacheFactory, method, ann);
     cache.removeExpired();
     if (cache.containsKey(relevantArgs) ) {
       return cache.get(relevantArgs);

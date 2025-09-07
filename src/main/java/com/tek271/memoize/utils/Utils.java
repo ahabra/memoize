@@ -29,8 +29,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.tek271.memoize.Remember;
-import com.tek271.memoize.cache.ICache;
-import com.tek271.memoize.cache.ICacheFactory;
 
 /**
  * Some utility static methods.
@@ -39,7 +37,7 @@ import com.tek271.memoize.cache.ICacheFactory;
  */
 public class Utils {
   
-  /** Check if the method is void, or if it does not have Remember annotation */
+  /** Check if the method is void, or if it does not have @Remember annotation */
   public static boolean isVoidOrNotAnnotatedWithRemember(Method method) {
     // if method is void then no memoize
     if (method.getReturnType() == Void.TYPE) return true;
@@ -47,13 +45,6 @@ public class Utils {
     // if method has no Remember annotation then no memoize
     Remember ann= method.getAnnotation(Remember.class);
     return ann == null;
-  }
-  
-  /** There is a cache for each memoized method ! */
-  public static ICache getCache(ICacheFactory cacheFactory, Method method, Remember remember) {
-    String methodDesc= method.toGenericString();
-    return cacheFactory.getCache(methodDesc, remember.maxSize(), 
-                                 remember.timeToLive(), remember.timeUnit());
   }
   
   /** Get the arguments that will be used as part of the key to this method's cache */  
