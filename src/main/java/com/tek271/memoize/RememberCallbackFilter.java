@@ -56,8 +56,8 @@ class RememberCallbackFilter implements CallbackFilter {
   public static Callback[] createCallbacks(MethodInterceptor interceptor) {
     Callback[] callbacks= new Callback[2];
     
-    callbacks[RememberCallbackFilter.INDEX_OF_NOOP]= NoOp.INSTANCE;
-    callbacks[RememberCallbackFilter.INDEX_OF_INTECEPTOR]= interceptor;
+    callbacks[INDEX_OF_NOOP]= NoOp.INSTANCE;
+    callbacks[INDEX_OF_INTECEPTOR]= interceptor;
     return callbacks;
   }
 }

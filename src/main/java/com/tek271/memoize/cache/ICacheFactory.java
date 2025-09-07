@@ -56,7 +56,7 @@ public interface ICacheFactory {
    */
   ICache getCache(String cacheName);
   
-  /** Remove all cahces from this factory */
+  /** Remove all caches from this factory */
   void clear();
   
   /** Remove the cache with the given name */
@@ -64,4 +64,6 @@ public interface ICacheFactory {
   
   /** Remove all expired cache entries from all caches. */
   void removeExpired();
+
+
 }
