@@ -39,12 +39,27 @@ public class Utils {
   
   /** Check if the method is void, or if it does not have @Remember annotation */
   public static boolean isVoidOrNotAnnotatedWithRemember(Method method) {
+    return !isMemoized(method);
+  }
+
+  /** Check if given method is memoized */
+  public static boolean isMemoized(Method method) {
     // if method is void then no memoize
-    if (method.getReturnType() == Void.TYPE) return true;
-    
-    // if method has no Remember annotation then no memoize
-    Remember ann= method.getAnnotation(Remember.class);
-    return ann == null;
+    if (method.getReturnType() == Void.TYPE) return false;
+
+    Remember ann = method.getAnnotation(Remember.class);
+    return ann != null;
+  }
+
+  public static List<Method> findListOfMemoizedMethods(Class<?> targetClass) {
+    Method[] methods = targetClass.getDeclaredMethods();
+    List<Method> result = new ArrayList<>();
+    for (Method method : methods) {
+      if (isMemoized(method)) {
+        result.add(method);
+      }
+    }
+    return result;
   }
   
   /** Get the arguments that will be used as part of the key to this method's cache */  
