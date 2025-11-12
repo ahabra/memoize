@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RememberFactory2Test {
+public class RememberFactoryTest {
 
   public static class MemoizedClass {
     int addCounter;
@@ -26,7 +26,7 @@ public class RememberFactory2Test {
 
   @Test
   void callingMemoizedMethodWithSameParamsCausesSingleInvocation() {
-    MemoizedClass proxy = RememberFactory2.createProxy(MemoizedClass.class);
+    MemoizedClass proxy = RememberFactory.createProxy(MemoizedClass.class);
     assertEquals(3, proxy.add(1, 2));
     assertEquals(3, proxy.add(1, 2));
     assertEquals(3, proxy.add(1, 2));
@@ -35,7 +35,7 @@ public class RememberFactory2Test {
 
   @Test
   void testMemoization() {
-    MemoizedClass proxy = RememberFactory2.createProxy(MemoizedClass.class);
+    MemoizedClass proxy = RememberFactory.createProxy(MemoizedClass.class);
 
     assertEquals(3, proxy.add(1, 2));
     assertEquals(3, proxy.add(1, 2));

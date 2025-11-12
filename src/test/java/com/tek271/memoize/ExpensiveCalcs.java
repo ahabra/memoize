@@ -28,7 +28,7 @@ public class ExpensiveCalcs {
   
   public static void clearLogAndCache() {
     LOG.clear();
-    RememberFactory2.clearCache();
+    RememberFactory.clearCache();
   }
   
   private static void sleep() throws Exception {

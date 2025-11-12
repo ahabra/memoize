@@ -9,7 +9,7 @@ public class RememberTest {
 
   private static ExpensiveCalcs getProxiedExpensiveCalcs() {
     clearLogAndCache();
-    return RememberFactory2.createProxy(ExpensiveCalcs.class);
+    return RememberFactory.createProxy(ExpensiveCalcs.class);
   }
 
   @Test

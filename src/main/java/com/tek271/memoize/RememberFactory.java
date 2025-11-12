@@ -11,7 +11,7 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class RememberFactory2 {
+public class RememberFactory {
   // TODO: if a multiple proxies of the same class are created, do cache the methods
   // TODO: for each instance, or for all?
 
@@ -28,7 +28,7 @@ public class RememberFactory2 {
     for (Method method : methods) {
       subclass = subclass
           .method(ElementMatchers.is(method))
-          .intercept(MethodDelegation.to(Interceptor2.class));
+          .intercept(MethodDelegation.to(Interceptor.class));
     }
 
 

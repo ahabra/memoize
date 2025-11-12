@@ -8,7 +8,7 @@ import net.bytebuddy.implementation.bind.annotation.*;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-public class Interceptor2 {
+public class Interceptor {
   private static final boolean IS_LOG_INTERCEPTOR = false;
 
   @RuntimeType
