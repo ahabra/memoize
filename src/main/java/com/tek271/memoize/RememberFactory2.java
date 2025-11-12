@@ -1,5 +1,6 @@
 package com.tek271.memoize;
 
+import com.tek271.memoize.cache.AllCache;
 import com.tek271.memoize.utils.ReflectionTools;
 import com.tek271.memoize.utils.Utils;
 import net.bytebuddy.ByteBuddy;
@@ -13,6 +14,8 @@ import java.util.List;
 public class RememberFactory2 {
   // TODO: if a multiple proxies of the same class are created, do cache the methods
   // TODO: for each instance, or for all?
+
+  // TODO: decorate an existing object
 
 
   public static <T> T createProxy(Class<T> targetClass) {
@@ -38,5 +41,13 @@ public class RememberFactory2 {
     return ReflectionTools.newInstance(cls);
   }
 
+  /**
+   * Clear the cache in the DefaultCacheFactory.
+   * Useful for unit testing.
+   * @since 1.1
+   */
+  public static void clearCache() {
+    AllCache.single().clear();
+  }
 
 }

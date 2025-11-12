@@ -8,7 +8,7 @@ import com.tek271.memoize.utils.UtilsArrays;
 
 public class ExpensiveCalcs {
   final static long DELAY= 100L;  // milli seconds
-  final static List<String> LOG= new ArrayList<String>();
+  final static List<String> LOG= new ArrayList<>();
   
   private String prefix= "";
   
@@ -28,7 +28,7 @@ public class ExpensiveCalcs {
   
   public static void clearLogAndCache() {
     LOG.clear();
-    RememberFactory.clearCache();
+    RememberFactory2.clearCache();
   }
   
   private static void sleep() throws Exception {
