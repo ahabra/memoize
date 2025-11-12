@@ -11,6 +11,8 @@ import net.bytebuddy.matcher.ElementMatchers;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.tek271.memoize.utils.ReflectionTools.getClassLoader;
+
 public class RememberFactory {
   // TODO: if a multiple proxies of the same class are created, do cache the methods
   // TODO: for each instance, or for all?
@@ -32,17 +34,15 @@ public class RememberFactory {
     }
 
 
-    ClassLoader classLoader = ReflectionTools.getClassLoader();
-    Class<? extends T> cls = subclass
-        .make()
-        .load(classLoader)
+    Class<? extends T> cls = subclass.make()
+        .load(getClassLoader())
         .getLoaded();
 
     return ReflectionTools.newInstance(cls);
   }
 
   /**
-   * Clear the cache in the DefaultCacheFactory.
+   * Clear the cache in AllCache.single().
    * Useful for unit testing.
    * @since 1.1
    */

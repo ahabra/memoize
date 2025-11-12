@@ -10,10 +10,16 @@ public class RememberFactoryTest {
 
   public static class MemoizedClass {
     int addCounter;
+    int addNotRememberedCounter;
 
     @Remember
     public int add(int a, int b) {
       addCounter++;
+      return a + b;
+    }
+
+    public int addNotRemembered(int a, int b) {
+      addNotRememberedCounter++;
       return a + b;
     }
 
@@ -49,4 +55,14 @@ public class RememberFactoryTest {
 
     assertEquals(3, proxy.addCounter);
   }
+
+  @Test
+  void whenMethodIsNotMemoizedItWillBeAlwaysInvoked() {
+    MemoizedClass proxy = RememberFactory.createProxy(MemoizedClass.class);
+    assertEquals(3, proxy.addNotRemembered(1, 2));
+    proxy.addNotRemembered(1, 2);
+    proxy.addNotRemembered(1, 2);
+    assertEquals(3, proxy.addNotRememberedCounter);
+  }
+
 }
