@@ -11,6 +11,14 @@ import java.util.Arrays;
 public class Interceptor {
   private static final boolean IS_LOG_INTERCEPTOR = false;
 
+  /**
+   *
+   * @param self The proxy object created by ByteBuddy
+   * @param originalMethod The original method that is getting proxied
+   * @param args arguments passed to the method
+   * @param superMethod The new proxy method created by ByteBuddy
+   * @return The result of calling the superMethod or its cached value
+   */
   @RuntimeType
   public static Object intercept(@This Object self,
                                  @Origin Method originalMethod,

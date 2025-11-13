@@ -56,6 +56,7 @@ public class RememberTest {
     assertEquals(2, LOG.size());
   }
 
+  // FIXME
 //  @Test
 //  public void testGetSalary() {
 //    // the annotation param at index 0 is excluded in ExpensiveCalcs.getSalary()
@@ -93,6 +94,7 @@ public class RememberTest {
     assertEquals(5, LOG.size());
   }
 
+  // FIXME
 //  @Test
 //  public void testDecorate() throws Exception {
 //    clearLogAndCache();
@@ -110,6 +112,7 @@ public class RememberTest {
 //    assertEquals(2, LOG.size());
 //  }
 
+  // FIXME
 //  @Test
 //  public void testDecorateWillActuallyUseDecoratedObject() throws Exception {
 //    clearLogAndCache();
@@ -126,6 +129,7 @@ public class RememberTest {
 //    assertEquals(prefix + WITHPARAMS, LOG.get(0));
 //  }
 //
+  // FIXME
 //  @Test
 //  public void testDecorateNullShouldThrowNPE() {
 //    clearLogAndCache();
