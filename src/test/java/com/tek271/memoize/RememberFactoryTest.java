@@ -65,4 +65,20 @@ public class RememberFactoryTest {
     assertEquals(3, proxy.addNotRememberedCounter);
   }
 
+  @Test
+  void decorateAnExistingObject() {
+    MemoizedClass object =  new MemoizedClass();
+    MemoizedClass proxy = RememberFactory.decorate(object);
+
+    assertEquals(3, proxy.add(1, 2));
+    assertEquals(3, proxy.add(1, 2));
+    assertEquals(3, proxy.add(1, 2));
+    assertEquals(1, proxy.addCounter);
+
+    assertEquals(3, proxy.addNotRemembered(1, 2));
+    assertEquals(3, proxy.addNotRemembered(1, 2));
+    assertEquals(2, object.addNotRememberedCounter);
+//    assertEquals(2, proxy.addNotRememberedCounter);
+  }
+
 }

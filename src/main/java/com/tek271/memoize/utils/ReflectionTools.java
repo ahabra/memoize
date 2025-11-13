@@ -2,6 +2,7 @@ package com.tek271.memoize.utils;
 
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -36,6 +37,46 @@ public class ReflectionTools {
     try {
       return method.invoke(target, args);
     } catch (IllegalAccessException | InvocationTargetException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static Field getField(Object target, String fieldName) {
+    if (target == null) {
+      throw new NullPointerException("target is null");
+    }
+    if (fieldName == null) {
+      throw new NullPointerException("fieldName is null");
+    }
+    try {
+      return target.getClass().getDeclaredField(fieldName);
+    } catch (NoSuchFieldException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void setFieldValue(Object target, Field field, Object value) {
+    try {
+      field.set(target, value);
+    } catch (IllegalAccessException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  public static void setFieldValue(Object target, String fieldName, Object value) {
+    if (target == null) {
+      throw new NullPointerException("target is null");
+    }
+    Field field = getField(target, fieldName);
+    setFieldValue(target, field, value);
+  }
+
+  public static <T> T getFieldValue(Object target, String fieldName) {
+    Field field = getField(target, fieldName);
+    try {
+      //noinspection unchecked
+      return (T) field.get(target);
+    } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
   }
