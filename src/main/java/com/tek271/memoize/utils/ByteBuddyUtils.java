@@ -31,7 +31,6 @@ public class ByteBuddyUtils {
 
   /**
    * Get the return value of a memoized method, either from the cache or by invoking the method.
-   *
    * @param proxy          The proxy object created by ByteBuddy
    * @param originalMethod The original method that is getting proxied
    * @param args           arguments passed to the method

@@ -11,7 +11,6 @@ public class Interceptor {
   private static final boolean IS_LOG_INTERCEPTOR = false;
 
   /**
-   *
    * @param proxy The proxy object created by ByteBuddy
    * @param originalMethod The original method that is getting proxied
    * @param args arguments passed to the method

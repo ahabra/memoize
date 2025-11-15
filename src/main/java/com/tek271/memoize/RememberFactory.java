@@ -33,7 +33,9 @@ public class RememberFactory {
     return createInstance(subclass);
   }
 
-  static final String OBJECT_TO_DECORATE_FIELD = "__objectToDecorate__";
+
+  /** A field name that is unlikely to be used in app code */
+  private static final String OBJECT_TO_DECORATE_FIELD = "__objectToDecorate__փ_ϣ_ሥ_ਟ_ꦒ_";
 
   public static <T> T decorate(T objectToDecorate) {
     if (objectToDecorate == null) {
