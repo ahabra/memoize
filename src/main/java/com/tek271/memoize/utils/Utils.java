@@ -23,12 +23,9 @@ You can contact the author at ahabra at yahoo.com
 
 package com.tek271.memoize.utils;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.tek271.memoize.Remember;
 
 /**
  * Some utility static methods.
@@ -36,32 +33,7 @@ import com.tek271.memoize.Remember;
  * @version 1.1
  */
 public class Utils {
-  
-  /** Check if the method is void, or if it does not have @Remember annotation */
-  public static boolean isVoidOrNotAnnotatedWithRemember(Method method) {
-    return !isMemoized(method);
-  }
 
-  /** Check if given method is memoized */
-  public static boolean isMemoized(Method method) {
-    // if method is void then no memoize
-    if (method.getReturnType() == Void.TYPE) return false;
-
-    Remember ann = method.getAnnotation(Remember.class);
-    return ann != null;
-  }
-
-  public static List<Method> findListOfMemoizedMethods(Class<?> targetClass) {
-    Method[] methods = targetClass.getDeclaredMethods();
-    List<Method> result = new ArrayList<>();
-    for (Method method : methods) {
-      if (isMemoized(method)) {
-        result.add(method);
-      }
-    }
-    return result;
-  }
-  
   /** Get the arguments that will be used as part of the key to this method's cache */  
   public static List<Object> getRelevantArguments(Object[] args,
                                                   int[] excludedParameters) {

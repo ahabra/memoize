@@ -3,7 +3,6 @@ package com.tek271.memoize;
 import com.tek271.memoize.cache.AllCache;
 import com.tek271.memoize.utils.ByteBuddyUtils;
 import com.tek271.memoize.utils.ReflectionTools;
-import com.tek271.memoize.utils.Utils;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.matcher.ElementMatchers;
@@ -12,13 +11,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static com.tek271.memoize.utils.ByteBuddyUtils.*;
+import static com.tek271.memoize.utils.ReflectionTools.findListOfMemoizedMethods;
 
 public class RememberFactory {
   // TODO: if multiple proxies of the same class are created, do we cache the methods
   // TODO: for each instance, or for all?
 
   public static <T> T createProxy(Class<T> targetClass) {
-    List<Method> methods = Utils.findListOfMemoizedMethods(targetClass);
+    List<Method> methods = findListOfMemoizedMethods(targetClass);
     if (methods.isEmpty()) {
       return ReflectionTools.newInstance(targetClass);
     }
@@ -27,7 +27,7 @@ public class RememberFactory {
     for (Method method : methods) {
       subclass = subclass
           .method(ElementMatchers.is(method))
-          .intercept(MethodDelegation.to(Interceptor.class));
+          .intercept(MethodDelegation.to(Interceptor.TypeInterceptor.class));
     }
 
     return createInstance(subclass);
@@ -42,7 +42,7 @@ public class RememberFactory {
       throw new NullPointerException("Memoizer cannot decorate a null object");
     }
     Class<?> targetClass = objectToDecorate.getClass();
-    List<Method> methods = Utils.findListOfMemoizedMethods(targetClass);
+    List<Method> methods = findListOfMemoizedMethods(targetClass);
     if (methods.isEmpty()) {
       return objectToDecorate;
     }
@@ -50,7 +50,7 @@ public class RememberFactory {
     DynamicType.Builder<?> subclass = subclass(targetClass);
     subclass = ByteBuddyUtils.addField(subclass, OBJECT_TO_DECORATE_FIELD, targetClass);
     subclass = subclass.method(ElementMatchers.any())
-        .intercept(MethodDelegation.to(DecoratorInterceptor.class));
+        .intercept(MethodDelegation.to(Interceptor.DecoratorInterceptor.class));
 
 
     //noinspection unchecked

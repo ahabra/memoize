@@ -1,10 +1,14 @@
 package com.tek271.memoize.utils;
 
 
+import com.tek271.memoize.Remember;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReflectionTools {
 
@@ -81,5 +85,25 @@ public class ReflectionTools {
     }
   }
 
+
+  /** Check if given method is not void and has @Remember annotation */
+  public static boolean isMemoized(Method method) {
+    // if method is void then no memoize
+    if (method.getReturnType() == Void.TYPE) return false;
+
+    Remember ann = method.getAnnotation(Remember.class);
+    return ann != null;
+  }
+
+  public static List<Method> findListOfMemoizedMethods(Class<?> targetClass) {
+    Method[] methods = targetClass.getDeclaredMethods();
+    List<Method> result = new ArrayList<>();
+    for (Method method : methods) {
+      if (isMemoized(method)) {
+        result.add(method);
+      }
+    }
+    return result;
+  }
 
 }
