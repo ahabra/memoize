@@ -18,6 +18,9 @@ public class RememberFactory {
   // TODO: for each instance, or for all?
 
   public static <T> T createProxy(Class<T> targetClass) {
+    if (targetClass == null) {
+      throw new NullPointerException("Memoizer cannot proxy a null object");
+    }
     List<Method> methods = findListOfMemoizedMethods(targetClass);
     if (methods.isEmpty()) {
       return ReflectionTools.newInstance(targetClass);

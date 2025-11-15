@@ -9,20 +9,18 @@ import java.util.concurrent.TimeUnit;
 
 public class SingleMethodCache<V> {
   private final BoundedTimedCache<MethodArgs, V> cache;
-
-  public SingleMethodCache(Remember remember) {
-    this.cache = createCache(remember);
-  }
+  private final Remember remember;
 
   public SingleMethodCache(Method method) {
-    Remember remember = method.getDeclaredAnnotation(Remember.class);
-    if (remember == null) {
+    this.remember = method.getDeclaredAnnotation(Remember.class);
+    if (this.remember == null) {
       throw new IllegalArgumentException("Method " + method + " must be annotated with @Remember");
     }
-    this.cache = createCache(remember);
+    this.cache = createCache(this.remember);
+
   }
 
-  private BoundedTimedCache<MethodArgs, V> createCache(Remember remember) {
+  private static <V> BoundedTimedCache<MethodArgs, V> createCache(Remember remember) {
     if (remember == null) {
       throw new IllegalArgumentException("Remember annotation cannot be null");
     }
@@ -32,20 +30,20 @@ public class SingleMethodCache<V> {
     return new BoundedTimedCache<>(maxSize, timeToLive, timeUnit);
   }
 
-  public CacheValue<V> get(MethodArgs methodArgs) {
+  private CacheValue<V> get(MethodArgs methodArgs) {
     return cache.get(methodArgs);
   }
 
   public CacheValue<V> get(Object[] args) {
-    return get(new MethodArgs(args));
+    return get(new MethodArgs(args, this.remember));
   }
 
-  public void put(MethodArgs methodArgs, V value) {
+  private void put(MethodArgs methodArgs, V value) {
     cache.put(methodArgs, value);
   }
 
   public void put(Object[] args, V value) {
-    put(new MethodArgs(args), value);
+    put(new MethodArgs(args, this.remember), value);
   }
 
   public void clear() {

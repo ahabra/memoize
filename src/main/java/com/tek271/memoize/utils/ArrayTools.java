@@ -2,15 +2,15 @@ package com.tek271.memoize.utils;
 
 import java.util.Objects;
 
-public class UtilsArrays {
+public class ArrayTools {
   
   /** Check of the array is null or zero-length */
-  public static boolean isArrayEmpty(Object[] array) {
+  public static boolean isEmpty(Object[] array) {
     return array==null || array.length==0;
   }
 
   /** Check of the array is null or zero-length */
-  public static boolean isArrayEmpty(int[] array) {
+  public static boolean isEmpty(int[] array) {
     return array==null || array.length==0;
   }
 

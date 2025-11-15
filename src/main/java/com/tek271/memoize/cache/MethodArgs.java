@@ -1,6 +1,11 @@
 package com.tek271.memoize.cache;
 
+import com.tek271.memoize.Remember;
+import com.tek271.memoize.utils.ArrayTools;
+
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class MethodArgs {
@@ -9,7 +14,7 @@ public class MethodArgs {
   private final Object[] args;
 
   // TODO handle excluded args
-  public MethodArgs(Object[] args) {
+  public MethodArgs(Object[] args, Remember remember) {
     this.timeStamp = System.currentTimeMillis();
     this.args = args;
   }
@@ -33,13 +38,23 @@ public class MethodArgs {
     return "MethodArgs{ timeStamp=" + timeStamp + ", "  + Arrays.toString(args) + '}';
   }
 
-  public boolean isExpired(long timeToLiveMillis) {
-    return System.currentTimeMillis() - timeStamp > timeToLiveMillis;
+  static List<Object> excludeArgs(Object[] args, Remember remember) {
+    List<Object> relevantArgs = excludeArgsByIndex(args, remember.excludedParametersIndex());
+
+    return relevantArgs;
   }
 
-  public void refreshTimeStamp() {
-    this.timeStamp = System.currentTimeMillis();
-  }
+  static List<Object> excludeArgsByIndex(Object[] args, int[] excludedParametersIndex) {
+    if (ArrayTools.isEmpty(args)) return new ArrayList<>();
+    if (ArrayTools.isEmpty(excludedParametersIndex)) return Arrays.asList(args);
 
+    List<Object> result = new ArrayList<>();
+    for (int i = 0; i < args.length; i++) {
+      if (!ArrayTools.isContain(excludedParametersIndex, i)) {
+        result.add(args[i]);
+      }
+    }
+    return result;
+  }
 
 }

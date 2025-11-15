@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import com.tek271.memoize.utils.UtilsArrays;
+import com.tek271.memoize.utils.ArrayTools;
 
 public class ExpensiveCalcs {
   final static long DELAY= 100L;  // milli seconds
@@ -68,7 +68,7 @@ public class ExpensiveCalcs {
   private static final int[] SALARIES= {100,     200,    300,     400,   500 };
   
   private static int lookupSalary(String name) {
-    int i= UtilsArrays.indexOf(NAMES, name);
+    int i= ArrayTools.indexOf(NAMES, name);
     if (i<0) return -1;
     return SALARIES[i];
   }
