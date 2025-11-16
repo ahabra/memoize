@@ -1,6 +1,6 @@
 # Java Memoizer
 
-A Java open source memoization library to cache the results of slow methods using annotations and a pluggable cache interface.
+A Java open source memoization library to cache the results of slow methods using annotations.
 
 ## History of this library
 I initially created this library back in 2007 using Java 5 and Ant build, this was before Github 
