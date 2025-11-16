@@ -169,7 +169,7 @@ other library (e.g. _Spring_).
 You can apply the `@Remember` annotation on methods that are:
 
 1. Not final
-2. No static
+2. Not static
 3. Not void
 4. For the same parameters values, the method must always return the same value
 5. The method must not have any side effects like setting fields or properties
@@ -177,9 +177,9 @@ You can apply the `@Remember` annotation on methods that are:
 
 The  `@Remember` annotation provides the following optional parameters:
 
-1. maxSize: int. Default value = 128. The maximum size of cache for the given method.
-2. timeToLive: long. Default value = 2. The period of time after which, cached return values of the method will expire.
-3. timeUnit: TimeUnit. Default value = TimeUnit.MINUTES
+1. `maxSize`: int. Default value = 128. The maximum size of cache for the given method.
+2. `timeToLive`: long. Default value = 2. The period of time after which, cached return values of the method will expire.
+3. `timeUnit`: TimeUnit. Default value = TimeUnit.MINUTES
 
 For example, if we need to memoize a method and cache up to 1000 values for up to one hour:
 
