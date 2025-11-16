@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
   <version>2.0.0-SNAPSHOT</version>
   <name>memoize</name>
-  <url>http://maven.apache.org</url>
+  <url>https://github.com/ahabra/memoizer</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +20,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.0</version>
+        <version>3.14.1</version>
         <configuration>
           <source>${java.version}</source>
           <target>${java.version}</target>
@@ -32,7 +32,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <configuration>
           <argLine>
             --add-opens=java.base/java.lang=ALL-UNNAMED
