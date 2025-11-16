@@ -89,6 +89,7 @@ Add the following dependency to your maven's `pom.xml`:
 ```
 
 You can also directly download the source form https://github.com/ahabra/memoizer and use it.
+Note that this library uses [Byte Buddy](https://bytebuddy.net) for byte code instrumentation.
 
 ## Usage
 Let's see how the same `readAuthorizationFromDb()` will look with the Tek271 Memoizer:
@@ -124,5 +125,101 @@ AuthDao authDao = RememberFactory.createProxy(AuthDao.class);
 String auth = authDao.readAuthorizationFromDb('some-user-login');
 ```
 
-TODO: finish me
+## API Details
+This library provides two static methods and two annotation, which will be discussed next.
+
+### RememberFactory.createProxy()
+It is defined as:
+
+```java
+package com.tek271.memoize;
+
+public class RememberFactory {
+
+  public static <T> T createProxy(Class<T> targetClass) {
+    //...
+  }
+}
+```
+
+Creates a caching (memoizing) proxy instance for a class that contains methods with `@Remember` annotation. 
+Calling these methods will cause them to be cached.
+The `targetClass` must provide a _parameter-less_ constructor.
+
+### RememberFactory.decorate()
+It is defined as:
+
+```java
+package com.tek271.memoize;
+
+public class RememberFactory {
+
+  public static <T> T decorate(T objectToDecorate) {
+    //...
+  }
+}
+```
+Creates a caching (memoizing) decorator for an existing object. The object's class definition
+should contain methods with `@Remember` annotation.
+
+Usually, you will call the `decorate()` method when you have an object already created by some
+other library (e.g. _Spring_).
+
+### @Remember Annotation
+You can apply the `@Remember` annotation on methods that are:
+
+1. Not final
+2. No static
+3. Not void
+4. For the same parameters values, the method must always return the same value
+5. The method must not have any side effects like setting fields or properties
+6. The method's parameters must support correct `equals()` and `hashCode()` methods
+
+The  `@Remember` annotation provides the following optional parameters:
+
+1. maxSize: int. Default value = 128. The maximum size of cache for the given method.
+2. timeToLive: long. Default value = 2. The period of time after which, cached return values of the method will expire.
+3. timeUnit: TimeUnit. Default value = TimeUnit.MINUTES
+
+For example, if we need to memoize a method and cache up to 1000 values for up to one hour:
+
+```java
+@Remember(maxSize=1000, timeToLive=1, timeUnit=TimeUnit.HOURS)
+```
+
+### @Exclude Annotation
+Sometimes, not all method parameters should be used as a part of the cache's key.
+You can apply the `@Exclude` annotation on these parameters. For example:
+
+```java
+import com.tek271.memoize.Exclude;
+import com.tek271.memoize.Remember;
+
+@Remember
+String readUserAddress(@Exclude Connection con,
+                       String userName) {
+    // ...
+}
+```
+The Connection object is not something that you should include in a cache's key.
+
+## References
+1. Byte buddy: https://bytebuddy.net
+2. Using Byte Buddy for proxy creation: https://www.javacodegeeks.com/2022/02/using-byte-buddy-for-proxy-creation.html
+3. Create Proxies Dynamically Using CGLIB Library: https://objectcomputing.com/resources/publications/sett/november-2005-create-proxies-dynamically-using-cglib-library
+
+## Changes
+1. Version 1.0,  2007.03.01. First public release
+2. Version 1.01, 2007.03.05. Some JavaDocs fixes and spelling mistakes.
+3. Version 1.1,  2009.06.27
+   1. Updated dependency to latest cglib jar (version 2.2)
+   2. Added RememberFactory.clearCache() methods to ease unit testing.
+   3. Added an optimization proposed by _Christian Semrau_.
+   4. Added Generics support to RememberFactory.createProxy()
+   5. Added RememberFactory.decorate() to decorate a given object (rather than class). This feature was requested by _Patrick McMichael_.
+4. Version 2.0.0 2025.?? 
+   1. Total re-write
+   2. Migrate from cglib to Byte Buddy
+   3. Use Maven build
+   4. Added @Exclude annotation
 

@@ -16,7 +16,7 @@ import static com.tek271.memoize.utils.ReflectionTools.findListOfMemoizedMethods
 public class RememberFactory {
 
   /**
-   * Create a caching (memoizing) proxy for an object that contains methods with <code>Remember</code> annotation.
+   * Create a caching (memoizing) proxy for an object that contains methods with <code>@Remember</code> annotation.
    * Calling these methods will cause them to be cached.
    * @param <T> The type of the object
    * @param targetClass The class to create a proxy for. The class must provide a
