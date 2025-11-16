@@ -73,10 +73,8 @@ public class ExpensiveCalcs {
     return SALARIES[i];
   }
   
-  @Remember(
-      excludedParametersIndex={0}
-  )
-  public int getSalary(Object dbConnection, String name) {
+  @Remember
+  public int getSalary(@Exclude Object dbConnection, String name) {
     log("getSalary(" + dbConnection + ", " + name + ")");
     return lookupSalary(name);
   }

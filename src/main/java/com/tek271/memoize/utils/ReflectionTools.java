@@ -97,12 +97,13 @@ public class ReflectionTools {
     return remember != null;
   }
 
-  private static Set<Integer> findIndexesOfIncludedParameters(Parameter[] parameters) {
+  public static Set<Integer> findIndexesOfExcludedParameters(Method method) {
     Set<Integer> result = new HashSet<>();
+    Parameter[] parameters = method.getParameters();
 
     for (int i = 0; i < parameters.length; i++) {
       Parameter parameter = parameters[i];
-      if (parameter.getDeclaredAnnotation(Exclude.class) == null) {
+      if (parameter.getDeclaredAnnotation(Exclude.class) != null) {
         result.add(i);
       }
     }

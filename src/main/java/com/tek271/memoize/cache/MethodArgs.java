@@ -1,22 +1,19 @@
 package com.tek271.memoize.cache;
 
-import com.tek271.memoize.Remember;
-import com.tek271.memoize.utils.ArrayTools;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class MethodArgs {
   /** timeStamp intentionally is NOT used in equals() and hashCode() */
-  private long timeStamp;
-  private final Object[] args;
+  private final long timeStamp;
+  private final List<Object> args = new ArrayList<>();
 
-  // TODO handle excluded args
-  public MethodArgs(Object[] args, Remember remember) {
+  public MethodArgs(Object[] args, Set<Integer> indexesOfExcludedParameters) {
     this.timeStamp = System.currentTimeMillis();
-    this.args = args;
+    for (int i = 0; i < args.length; i++) {
+      if (!indexesOfExcludedParameters.contains(i)) {
+        this.args.add(args[i]);
+      }
+    }
   }
 
   @Override
@@ -30,31 +27,13 @@ public class MethodArgs {
 
   @Override
   public int hashCode() {
-    return Arrays.hashCode(args);
+    return args.hashCode();
   }
 
   @Override
   public String toString() {
-    return "MethodArgs{ timeStamp=" + timeStamp + ", "  + Arrays.toString(args) + '}';
+    return "MethodArgs{ timeStamp=" + timeStamp + ", "  + args + '}';
   }
 
-  static List<Object> excludeArgs(Object[] args, Remember remember) {
-    List<Object> relevantArgs = excludeArgsByIndex(args, remember.excludedParametersIndex());
-
-    return relevantArgs;
-  }
-
-  static List<Object> excludeArgsByIndex(Object[] args, int[] excludedParametersIndex) {
-    if (ArrayTools.isEmpty(args)) return new ArrayList<>();
-    if (ArrayTools.isEmpty(excludedParametersIndex)) return Arrays.asList(args);
-
-    List<Object> result = new ArrayList<>();
-    for (int i = 0; i < args.length; i++) {
-      if (!ArrayTools.isContain(excludedParametersIndex, i)) {
-        result.add(args[i]);
-      }
-    }
-    return result;
-  }
 
 }

@@ -48,9 +48,9 @@ import java.util.concurrent.TimeUnit;
  * <code>hashCode()</code> methods. 
  * </ol>
  * If the method has parameters which you do not want to use as part of the caching key,
- * you should exclude them with the <code>excludedParametersIndex</code> attribute. For
- * example if a method reads some value from a database, and the method has a 
- * <code>java.sql.Connection</code> paramater, this parameter must be excluded.
+ * you should exclude them be applying the @Exclude annotation oon the given parameter.
+ * For example if a method reads some value from a database, and the method has a
+ * <code>java.sql.Connection</code> parameter, this parameter must be excluded.
  * 
  * @author Abdul Habra
  * @version 1.0
@@ -70,11 +70,5 @@ public @interface Remember {
   
   /** The unit of time for the timeToLive attribute. The default is Minute. */
   TimeUnit timeUnit() default TimeUnit.MINUTES;
-  
-  /** Method parameters that should NOT be used as part of the cache's key.
-   * The java reflection API does not provide access to method's parameters
-   * names, hence we will use index. The index of the first parameter is zero.
-   *  */
-  int[] excludedParametersIndex() default {};
 
 }
