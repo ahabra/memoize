@@ -43,13 +43,13 @@ public class ExpensiveCalcs {
   }
 
   @Remember
-  public long noParams() throws Exception {
+  public long noParams() {
     COUNTERS.noParams++;
     return System.currentTimeMillis();
   }
 
   @Remember
-  public String withParams(String param1) throws Exception {
+  public String withParams(String param1) {
     COUNTERS.withParams++;
     return param1.toUpperCase();
   }
@@ -66,6 +66,7 @@ public class ExpensiveCalcs {
     return SALARIES.getOrDefault(name, -1);
   }
 
+  @SuppressWarnings("unused")
   @Remember
   public int getSalary(@Exclude Object dbConnection, String name) {
     COUNTERS.getSalary++;

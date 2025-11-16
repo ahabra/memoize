@@ -14,9 +14,17 @@ import static com.tek271.memoize.utils.ByteBuddyUtils.*;
 import static com.tek271.memoize.utils.ReflectionTools.findListOfMemoizedMethods;
 
 public class RememberFactory {
-  // TODO: if multiple proxies of the same class are created, do we cache the methods
-  // TODO: for each instance, or for all?
 
+  /**
+   * Create a caching (memoizing) proxy for an object that contains methods with <code>Remember</code> annotation.
+   * Calling these methods will cause them to be cached.
+   * @param <T> The type of the object
+   * @param targetClass The class to create a proxy for. The class must provide a
+   * parameter-less constructor.
+   * @return An object of the type <code>targetClass</code> where methods that are
+   * annotated by <code>Remember</code> will be cached.
+   * @since 1.0
+   */
   public static <T> T createProxy(Class<T> targetClass) {
     if (targetClass == null) {
       throw new NullPointerException("Memoizer cannot proxy a null object");
@@ -40,6 +48,15 @@ public class RememberFactory {
   /** A field name that is unlikely to be used in app code */
   private static final String OBJECT_TO_DECORATE_FIELD = "__objectToDecorate__փ_ϣ_ሥ_ਟ_ꦒ_";
 
+  /**
+   * Memoize methods of an existing object. Allows integrating with other frameworks like
+   * <i>Spring</i>.
+   * @param <T> The type of the object
+   * @param objectToDecorate The object should have at least one Remember annotation
+   * @return an object of type T which decorates <code>objectToDecorate</code>. Method
+   * invocations will be routed to the objectToDecorate after checking for memoization.
+   * @since 1.1
+   */
   public static <T> T decorate(T objectToDecorate) {
     if (objectToDecorate == null) {
       throw new NullPointerException("Memoizer cannot decorate a null object");

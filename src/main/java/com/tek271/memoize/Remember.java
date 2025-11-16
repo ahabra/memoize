@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
  * <code>hashCode()</code> methods. 
  * </ol>
  * If the method has parameters which you do not want to use as part of the caching key,
- * you should exclude them be applying the @Exclude annotation oon the given parameter.
+ * you should exclude them be applying the <code>@Exclude</code> annotation on the given parameter.
  * For example if a method reads some value from a database, and the method has a
  * <code>java.sql.Connection</code> parameter, this parameter must be excluded.
  * 

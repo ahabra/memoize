@@ -21,7 +21,7 @@ public class ReflectionTools {
     return newInstance(constructor);
   }
 
-  public static <T> T newInstance(Constructor<T> constructor) {
+  private static <T> T newInstance(Constructor<T> constructor) {
     try {
       return constructor.newInstance();
     } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
@@ -102,8 +102,7 @@ public class ReflectionTools {
     Parameter[] parameters = method.getParameters();
 
     for (int i = 0; i < parameters.length; i++) {
-      Parameter parameter = parameters[i];
-      if (parameter.getDeclaredAnnotation(Exclude.class) != null) {
+      if (parameters[i].getDeclaredAnnotation(Exclude.class) != null) {
         result.add(i);
       }
     }

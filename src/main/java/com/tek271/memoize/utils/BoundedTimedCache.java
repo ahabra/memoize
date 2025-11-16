@@ -8,6 +8,13 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * An in-memory cache (Map) object with limited size and life-span of values.
+ * This class utilizes <code>LinkedHashMap</code> to control the size of the map.
+ * Expired (timed-out) values are checked and removed at the start of all calls to this class methods.
+ * @param <K> The type of the key
+ * @param <V> The type of the value
+ */
 public class BoundedTimedCache<K, V> {
   private static final int INITIAL_CAPACITY = 16;
   private static final float LOAD_FACTOR = 0.75f;
@@ -62,6 +69,11 @@ public class BoundedTimedCache<K, V> {
   public final long timeToLiveNanos;
   private final Map<K, TimedValue<V>> map;
 
+  /**
+   * Create a bounded cache object
+   * @param maxSize The maximum size of the cache
+   * @param timeToLive Maximum time for a value to live in the cache
+   */
   public BoundedTimedCache(int maxSize, Duration timeToLive) {
     this.maxSize = maxSize;
     this.timeToLive = timeToLive;
