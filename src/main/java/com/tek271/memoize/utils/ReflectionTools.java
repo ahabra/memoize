@@ -1,14 +1,14 @@
 package com.tek271.memoize.utils;
 
 
+import com.tek271.memoize.Exclude;
 import com.tek271.memoize.Remember;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ReflectionTools {
 
@@ -85,21 +85,35 @@ public class ReflectionTools {
     }
   }
 
-
-  /** Check if given method is not void and has @Remember annotation */
-  public static boolean isMemoized(Method method) {
+  /**
+   * Check if given method is not void and has @Remember annotation.
+   * Note that if a method has no parameters, it can still be memoized.
+   **/
+  public static boolean isMemoizable(Method method) {
     // if method is void then no memoize
-    if (method.getReturnType() == Void.TYPE) return false;
+    if (method == null || method.getReturnType() == Void.TYPE) return false;
 
-    Remember ann = method.getAnnotation(Remember.class);
-    return ann != null;
+    Remember remember = method.getAnnotation(Remember.class);
+    return remember != null;
+  }
+
+  private static Set<Integer> findIndexesOfIncludedParameters(Parameter[] parameters) {
+    Set<Integer> result = new HashSet<>();
+
+    for (int i = 0; i < parameters.length; i++) {
+      Parameter parameter = parameters[i];
+      if (parameter.getDeclaredAnnotation(Exclude.class) == null) {
+        result.add(i);
+      }
+    }
+    return result;
   }
 
   public static List<Method> findListOfMemoizedMethods(Class<?> targetClass) {
     Method[] methods = targetClass.getDeclaredMethods();
     List<Method> result = new ArrayList<>();
     for (Method method : methods) {
-      if (isMemoized(method)) {
+      if (isMemoizable(method)) {
         result.add(method);
       }
     }

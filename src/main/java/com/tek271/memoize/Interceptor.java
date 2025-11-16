@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import static com.tek271.memoize.utils.ByteBuddyUtils.getValueOfMemoizedMethod;
 import static com.tek271.memoize.utils.ByteBuddyUtils.logInterception;
 import static com.tek271.memoize.utils.ReflectionTools.invokeMethod;
-import static com.tek271.memoize.utils.ReflectionTools.isMemoized;
+import static com.tek271.memoize.utils.ReflectionTools.isMemoizable;
 
 public class Interceptor {
   private static final boolean IS_LOG_INTERCEPTOR = false;
@@ -54,7 +54,7 @@ public class Interceptor {
         logInterception(proxy, originalMethod, args, superMethod);
       }
 
-      if (isMemoized(originalMethod)) {
+      if (isMemoizable(originalMethod)) {
         return getValueOfMemoizedMethod(proxy, originalMethod, args, superMethod);
       }
 
