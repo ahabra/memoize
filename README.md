@@ -1,4 +1,6 @@
-# Java Tek271 Memoizer
+# Java Tek271 Memoizer - Under Construction
+
+**I am working on this. Not Ready For Production Use Yet.**
 
 A Java open source memoization library to cache the results of slow methods using annotations.
 
@@ -82,13 +84,13 @@ Add the following dependency to your maven's `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>com.tek271.memoize</groupId>
+    <groupId>com.tek271</groupId>
     <artifactId>memoize</artifactId>
     <version>2.0.0</version>
 </dependency>
 ```
 
-You can also directly download the source form https://github.com/ahabra/memoizer and use it.
+You can also directly download the source form https://github.com/ahabra/memoize and use it.
 Note that this library uses [Byte Buddy](https://bytebuddy.net) for byte code instrumentation.
 
 ## Usage
@@ -217,9 +219,10 @@ The Connection object is not something that you should include in a cache's key.
    3. Added an optimization proposed by _Christian Semrau_.
    4. Added Generics support to RememberFactory.createProxy()
    5. Added RememberFactory.decorate() to decorate a given object (rather than class). This feature was requested by _Patrick McMichael_.
-4. Version 2.0.0 2025.?? 
+4. Version 2.0.0, 2025.11.??
    1. Total re-write
    2. Migrate from cglib to Byte Buddy
    3. Use Maven build
    4. Added @Exclude annotation
+   5. Publish on maven central
 

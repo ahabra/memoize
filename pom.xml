@@ -1,12 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.tek271.memoize</groupId>
+
+  <groupId>com.tek271</groupId>
   <artifactId>memoize</artifactId>
   <packaging>jar</packaging>
   <version>2.0.0</version>
-  <name>memoize</name>
-  <url>https://github.com/ahabra/memoizer</url>
+  <name>${project.groupId}:${project.artifactId}</name>
+  <description>A Java library to simplify method memoization</description>
+  <url>https://github.com/ahabra/memoize</url>
 
   <licenses>
     <license>
@@ -28,6 +31,23 @@
     <java.version>17</java.version>
     <maven.compiler.release>${java.version}</maven.compiler.release>
   </properties>
+
+  <scm>
+    <connection>scm:git:git://github.com/ahabra/memoize.git</connection>
+    <developerConnection>scm:git:ssh://github.com:ahabra/memoize.git</developerConnection>
+    <url>https://github.com/ahabra/memoize/tree/develop</url>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
 
   <build>
     <finalName>memoize</finalName>
@@ -56,8 +76,8 @@
         </configuration>
       </plugin>
 
+      <!-- bundle source with build  -->
       <plugin>
-        <!-- bundle source with build  -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
         <version>3.3.1</version>
@@ -69,8 +89,8 @@
         </executions>
       </plugin>
 
+      <!-- bundle javadocs with build  -->
       <plugin>
-        <!-- bundle javadocs with build  -->
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.12.0</version>
@@ -95,6 +115,21 @@
         <configuration>
           <publishingServerId>central</publishingServerId>
         </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.2.8</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
     </plugins>
