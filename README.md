@@ -1,6 +1,4 @@
-# Java Tek271 Memoizer - Under Construction
-
-**I am working on this. Not Ready For Production Use Yet.**
+# Java Tek271 Memoizer
 
 A Java open source memoization library to cache the results of slow methods using annotations.
 
@@ -219,7 +217,7 @@ The Connection object is not something that you should include in a cache's key.
    3. Added an optimization proposed by _Christian Semrau_.
    4. Added Generics support to RememberFactory.createProxy()
    5. Added RememberFactory.decorate() to decorate a given object (rather than class). This feature was requested by _Patrick McMichael_.
-4. Version 2.0.0, 2025.11.??
+4. Version 2.0.0, 2025.11.18
    1. Total re-write
    2. Migrate from cglib to Byte Buddy
    3. Use Maven build

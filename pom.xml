@@ -5,8 +5,8 @@
 
   <groupId>com.tek271</groupId>
   <artifactId>memoize</artifactId>
-  <packaging>jar</packaging>
   <version>2.0.0</version>
+  <packaging>jar</packaging>
   <name>${project.groupId}:${project.artifactId}</name>
   <description>A Java library to simplify method memoization</description>
   <url>https://github.com/ahabra/memoize</url>
@@ -114,6 +114,7 @@
         <extensions>true</extensions>
         <configuration>
           <publishingServerId>central</publishingServerId>
+          <autoPublish>true</autoPublish>
         </configuration>
       </plugin>
 
