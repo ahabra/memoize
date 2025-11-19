@@ -11,6 +11,7 @@
   <description>A Java library to simplify method memoization</description>
   <url>https://github.com/ahabra/memoize</url>
 
+  <!-- Required by sonatype maven central  -->
   <licenses>
     <license>
       <name>The Apache License, Version 2.0</name>
@@ -18,6 +19,7 @@
     </license>
   </licenses>
 
+  <!-- Required by sonatype maven central  -->
   <developers>
     <developer>
       <name>Abdul Habra</name>
@@ -32,12 +34,14 @@
     <maven.compiler.release>${java.version}</maven.compiler.release>
   </properties>
 
+  <!-- Required by sonatype maven central  -->
   <scm>
     <connection>scm:git:git://github.com/ahabra/memoize.git</connection>
     <developerConnection>scm:git:ssh://github.com:ahabra/memoize.git</developerConnection>
     <url>https://github.com/ahabra/memoize/tree/develop</url>
   </scm>
 
+  <!-- Required by sonatype maven central  -->
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
@@ -76,7 +80,7 @@
         </configuration>
       </plugin>
 
-      <!-- bundle source with build  -->
+      <!-- bundle source with build. Required by sonatype maven central -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -89,7 +93,7 @@
         </executions>
       </plugin>
 
-      <!-- bundle javadocs with build  -->
+      <!-- bundle javadocs with build. Required by sonatype maven central  -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
@@ -107,6 +111,7 @@
         </executions>
       </plugin>
 
+      <!-- Required by sonatype maven central  -->
       <plugin>
         <groupId>org.sonatype.central</groupId>
         <artifactId>central-publishing-maven-plugin</artifactId>
@@ -118,6 +123,7 @@
         </configuration>
       </plugin>
 
+      <!-- Required by sonatype maven central  -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
