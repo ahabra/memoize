@@ -11,18 +11,18 @@ so here it is again.
 * Here is the [old code before migrating to github](old/old-1.1.zip)
 * Here is the [old programmer's introduction](old/tek271.memoizer.intro.html)
 
-The remaining of this document describes the new and updated version.
+The remainder of this document describes the new and updated version.
 
 ## Introduction
 If a function produces the same output given the same inputs, and if this function is slow,
 it makes sense for the function to cache its outputs to avoid repeated evaluations. This caching
 behavior is called [Memoization](https://en.wikipedia.org/wiki/Memoization) 
-_(Yes, there is no __r__)_.
+_(yes, there is no __r__)_.
 
 This library provides a simple mechanism to memoize any Java method using `@Remember` annotation.
 
 ## Motivation
-Suppose that you have a method that reads some authorization string from database for a given login:
+Suppose that you have a method which reads some authorization string from database for a given login:
 
 ```java
 // This is not ideal code, it is meant only to show a concept
@@ -62,7 +62,7 @@ public String readAuthorizationFromDb(String loginId) {
 
 This solution could work for a simple program, however it suffers from several problems such as:
 1. There is no control on the size of the map. If the method is called many times with different 
-    loginIds, the size of map can increase and run out of memory.
+    loginIds, the size of map can increase and consume a lot of memory.
 2. There is no control on expiring items in the cache. Once a loginId is put in the map it stays
     there, if the database contents change, there is no way to update the content of the map 
     besides restarting the program.
@@ -84,7 +84,7 @@ Add the following dependency to your maven's `pom.xml`:
 <dependency>
     <groupId>com.tek271</groupId>
     <artifactId>memoize</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
 </dependency>
 ```
 
@@ -223,4 +223,6 @@ The Connection object is not something that you should include in a cache's key.
    3. Use Maven build
    4. Added @Exclude annotation
    5. Publish on maven central
+5. Version 2.0.1, small typo fixes
+
 
